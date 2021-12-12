@@ -36,10 +36,11 @@ repositories {
 }
 
 dependencies {
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.2")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    implementation(libs.annotations)
 }
 
-tasks.test {
-    useJUnitPlatform()
+testing {
+    suites.named<JvmTestSuite>("test") {
+        useJUnitJupiter(libs.versions.junit.jupiter.get())
+    }
 }

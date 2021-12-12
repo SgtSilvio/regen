@@ -1,6 +1,9 @@
 [versions]
+annotations = "23.0.0"
+junit-jupiter = "5.8.2"
 
 [libraries]
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
 [bundles]
 

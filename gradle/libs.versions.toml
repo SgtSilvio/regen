@@ -1,0 +1,8 @@
+[versions]
+
+[libraries]
+
+[bundles]
+
+[plugins]
+metadata = { id = "com.github.sgtsilvio.gradle.metadata", version = "0.3.0" }

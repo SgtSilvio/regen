@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation(libs.annotations)
+    compileOnlyApi(libs.annotations)
 }
 
 testing {

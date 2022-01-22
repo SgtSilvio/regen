@@ -12,13 +12,16 @@ public class Alternation implements RegexPart {
 
     public Alternation(final @NotNull RegexPart @NotNull [] alternatives) {
         this.alternatives = alternatives;
-        this.size = getSize(alternatives);
+        this.size = calculateSize(alternatives);
     }
 
-    private static int getSize(final @NotNull RegexPart @NotNull [] alternatives) {
+    private static int calculateSize(final @NotNull RegexPart @NotNull [] alternatives) {
         int size = 0;
         for (final RegexPart alternative : alternatives) {
             size += alternative.getSize();
+            if (size < 0) { // overflow
+                return Integer.MAX_VALUE;
+            }
         }
         return size;
     }

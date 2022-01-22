@@ -15,13 +15,16 @@ public class Group implements RegexPart {
     public Group(final @NotNull RegexPart @NotNull [] parts, final @Nullable String name) {
         this.parts = parts;
         this.name = name;
-        this.size = getSize(parts);
+        this.size = calculateSize(parts);
     }
 
-    public static int getSize(final @NotNull RegexPart @NotNull [] parts) {
+    private static int calculateSize(final @NotNull RegexPart @NotNull [] parts) {
         int size = 0;
         for (final RegexPart part : parts) {
             size += part.getSize();
+            if (size < 0) { // overflow
+                return Integer.MAX_VALUE;
+            }
         }
         return size;
     }

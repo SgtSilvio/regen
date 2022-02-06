@@ -16,7 +16,7 @@ public class NumberRange implements RegexPart {
     }
 
     @Override
-    public int getSize() {
+    public int getQuantity() {
         return toNumber - fromNumber + 1;
     }
 }

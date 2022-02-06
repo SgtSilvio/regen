@@ -19,18 +19,18 @@ public class Group implements RegexPart {
     }
 
     private static int calculateSize(final @NotNull RegexPart @NotNull [] parts) {
-        int size = 0;
+        int quantity = 0;
         for (final RegexPart part : parts) {
-            size += part.getSize();
-            if (size < 0) { // overflow
+            quantity += part.getQuantity();
+            if (quantity < 0) { // overflow
                 return Integer.MAX_VALUE;
             }
         }
-        return size;
+        return quantity;
     }
 
     @Override
-    public int getSize() {
+    public int getQuantity() {
         return size;
     }
 }

@@ -14,7 +14,7 @@ public class Constant implements RegexPart {
     }
 
     @Override
-    public int getSize() {
+    public int getQuantity() {
         return 0;
     }
 }

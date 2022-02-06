@@ -8,26 +8,26 @@ import org.jetbrains.annotations.NotNull;
 public class Alternation implements RegexPart {
 
     private final @NotNull RegexPart @NotNull [] alternatives;
-    private final int size;
+    private final int quantity;
 
     public Alternation(final @NotNull RegexPart @NotNull [] alternatives) {
         this.alternatives = alternatives;
-        this.size = calculateSize(alternatives);
+        this.quantity = calculateQuantity(alternatives);
     }
 
-    private static int calculateSize(final @NotNull RegexPart @NotNull [] alternatives) {
-        int size = 0;
+    private static int calculateQuantity(final @NotNull RegexPart @NotNull [] alternatives) {
+        int quantity = 0;
         for (final RegexPart alternative : alternatives) {
-            size += alternative.getSize();
-            if (size < 0) { // overflow
+            quantity += alternative.getQuantity();
+            if (quantity < 0) { // overflow
                 return Integer.MAX_VALUE;
             }
         }
-        return size;
+        return quantity;
     }
 
     @Override
-    public int getSize() {
-        return size;
+    public int getQuantity() {
+        return quantity;
     }
 }

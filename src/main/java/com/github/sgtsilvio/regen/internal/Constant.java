@@ -7,7 +7,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Constant implements RegexPart {
 
-    private final byte @NotNull [] value;
+    static final @NotNull Constant EMPTY = new Constant(new byte[0]);
+
+    final byte @NotNull [] value;
 
     public Constant(final byte @NotNull [] value) {
         this.value = value;
@@ -15,6 +17,6 @@ public class Constant implements RegexPart {
 
     @Override
     public int getQuantity() {
-        return 0;
+        return 1;
     }
 }

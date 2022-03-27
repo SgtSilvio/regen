@@ -23,6 +23,28 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Repetition implements RegexPart {
 
+    static @NotNull Repetition neverOrOnce(final @NotNull RegexPart part) {
+        return new Repetition(part, 0, 1, Integer.MAX_VALUE, false);
+    }
+
+    static @NotNull Repetition neverOrMore(final @NotNull RegexPart part) {
+        return new Repetition(part, 0, Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+    }
+
+    static @NotNull Repetition onceOrMore(final @NotNull RegexPart part) {
+        return new Repetition(part, 1, Integer.MAX_VALUE, Integer.MAX_VALUE, false);
+    }
+
+    static @NotNull Repetition nTimes(
+            final @NotNull RegexPart part, final int n, final int maxQuantity, final boolean randomize) {
+        return new Repetition(part, n, n, maxQuantity, randomize);
+    }
+
+    static @NotNull Repetition nToMTimes(
+            final @NotNull RegexPart part, final int n, final int m, final int maxQuantity) {
+        return new Repetition(part, n, m, maxQuantity, false);
+    }
+
     private final @NotNull RegexPart part;
     private final int minRepetitions;
     private final int maxRepetitions;
@@ -31,7 +53,7 @@ public class Repetition implements RegexPart {
     private final int quantity;
 
     // validation if maxSize != Integer.MAX_VALUE && maxSize > getSize() warn
-    public Repetition(
+    private Repetition(
             final @NotNull RegexPart part,
             final int minRepetitions,
             final int maxRepetitions,
@@ -49,16 +71,24 @@ public class Repetition implements RegexPart {
     private static int calculateQuantity(
             final @NotNull RegexPart part, final int minRepetitions, final int maxRepetitions, final int maxQuantity) {
 
-        // factor can not overflow because Integer.MAX_VALUE * (Integer.MAX_VALUE + 1) < Long.MAX_VALUE
-        final long factor =
-                ((maxRepetitions * ((long) maxRepetitions + 1)) - ((long) (minRepetitions - 1) * minRepetitions)) / 2;
-        if (factor >= Integer.MAX_VALUE) {
+        if (maxRepetitions == Integer.MAX_VALUE) {
             return maxQuantity;
         }
-        // size can not overflow because Integer.MAX_VALUE * (Integer.MAX_VALUE - 1) + 1 < Long.MAX_VALUE
-        final long quantity = part.getQuantity() * factor + ((minRepetitions == 0) ? 1 : 0);
-        // cast to int is safe as maxSize <= Integer.MAX_VALUE
-        return (int) Math.min(quantity, maxQuantity);
+        final int partQuantity = part.getQuantity();
+        int pow = (int) Math.pow(partQuantity, minRepetitions);
+        int sum = pow;
+        for (int i = minRepetitions; i < maxRepetitions; i++) {
+            final long product = (long) pow * partQuantity;
+            if (product > maxQuantity) {
+                return maxQuantity;
+            }
+            pow = (int) product;
+            sum += pow;
+            if (sum < 0) {
+                return maxQuantity;
+            }
+        }
+        return Math.min(sum, maxQuantity);
     }
 
     @Override

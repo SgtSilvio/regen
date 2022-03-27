@@ -3,12 +3,12 @@ package com.github.sgtsilvio.regen.internal;
 /**
  * @author Silvio Giebl
  */
-public class CharacterClass implements RegexPart {
+public class CharacterRange implements RegexPart {
 
-    private final int fromCodePoint;
-    private final int toCodePoint;
+    final int fromCodePoint;
+    final int toCodePoint;
 
-    public CharacterClass(final int fromCodePoint, final int toCodePoint) {
+    public CharacterRange(final int fromCodePoint, final int toCodePoint) {
         this.fromCodePoint = fromCodePoint;
         this.toCodePoint = toCodePoint;
     }

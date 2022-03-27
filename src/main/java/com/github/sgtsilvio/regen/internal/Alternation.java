@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Alternation implements RegexPart {
 
-    private final @NotNull RegexPart @NotNull [] alternatives;
+    final @NotNull RegexPart @NotNull [] alternatives;
     private final int quantity;
 
     public Alternation(final @NotNull RegexPart @NotNull [] alternatives) {

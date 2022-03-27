@@ -1,4 +1,4 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +76,7 @@ class CharacterSetParser {
             return alternatives.first();
         }
         return mergeAlternatives(alternatives);
-//        Pattern.compile("[\\(\\)\\[\\]\\|\\?\\*\\+\\{\\}\\\\\\^\\$\\.\\-]");
+//        Pattern.compile("[\\(\\)\\[\\]\\|\\?\\*\\+\\{\\}\\\\\\^\\$\\.\\-]"); // TODO remove
     }
 
     private static int parseCodePoint(final @NotNull ByteBuffer byteBuffer) {

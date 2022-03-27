@@ -1,16 +1,16 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Silvio Giebl
  */
-public class Alternation implements RegexPart {
+class Alternation implements RegexPart {
 
     final @NotNull RegexPart @NotNull [] alternatives;
     private final int quantity;
 
-    public Alternation(final @NotNull RegexPart @NotNull [] alternatives) {
+    Alternation(final @NotNull RegexPart @NotNull [] alternatives) {
         this.alternatives = alternatives;
         this.quantity = calculateQuantity(alternatives);
     }

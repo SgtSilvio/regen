@@ -1,21 +1,21 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Silvio Giebl
  */
-public class Reference implements RegexPart {
+class Reference implements RegexPart {
 
     private final @NotNull String name;
 
-    public Reference(final @NotNull String name) {
+    Reference(final @NotNull String name) {
         this.name = name;
     }
 
 //    private final @NotNull Group group;
 //
-//    public Reference(final @NotNull Group group) {
+//    Reference(final @NotNull Group group) {
 //        this.group = group;
 //    }
 

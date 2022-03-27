@@ -1,14 +1,14 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 /**
  * @author Silvio Giebl
  */
-public class CharacterRange implements RegexPart {
+class CharacterRange implements RegexPart {
 
     final int fromCodePoint;
     final int toCodePoint;
 
-    public CharacterRange(final int fromCodePoint, final int toCodePoint) {
+    CharacterRange(final int fromCodePoint, final int toCodePoint) {
         this.fromCodePoint = fromCodePoint;
         this.toCodePoint = toCodePoint;
     }

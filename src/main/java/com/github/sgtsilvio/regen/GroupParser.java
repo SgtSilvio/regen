@@ -1,4 +1,4 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

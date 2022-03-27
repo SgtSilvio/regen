@@ -1,16 +1,16 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Silvio Giebl
  */
-public class Group implements RegexPart {
+class Group implements RegexPart {
 
     private final @NotNull RegexPart part;
     private final @NotNull String name;
 
-    public Group(final @NotNull RegexPart part, final @NotNull String name) {
+    Group(final @NotNull RegexPart part, final @NotNull String name) {
         this.part = part;
         this.name = name;
     }

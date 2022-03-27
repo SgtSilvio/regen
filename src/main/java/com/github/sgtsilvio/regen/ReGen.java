@@ -1,7 +1,5 @@
 package com.github.sgtsilvio.regen;
 
-import com.github.sgtsilvio.regen.internal.ConcatenationParser;
-import com.github.sgtsilvio.regen.internal.RegexPart;
 import org.jetbrains.annotations.NotNull;
 
 import java.nio.ByteBuffer;
@@ -24,7 +22,7 @@ public class ReGen {
 
     private final @NotNull RegexPart root;
 
-    public ReGen(final @NotNull RegexPart root) {
+    private ReGen(final @NotNull RegexPart root) {
         this.root = root;
     }
 

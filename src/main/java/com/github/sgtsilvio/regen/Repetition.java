@@ -1,4 +1,4 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Silvio Giebl
  */
-public class Repetition implements RegexPart {
+class Repetition implements RegexPart {
 
     static @NotNull Repetition neverOrOnce(final @NotNull RegexPart part) {
         return new Repetition(part, 0, 1, Integer.MAX_VALUE, false);

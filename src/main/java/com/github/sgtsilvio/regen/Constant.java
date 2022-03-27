@@ -1,17 +1,17 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Silvio Giebl
  */
-public class Constant implements RegexPart {
+class Constant implements RegexPart {
 
     static final @NotNull Constant EMPTY = new Constant(new byte[0]);
 
     final byte @NotNull [] value;
 
-    public Constant(final byte @NotNull [] value) {
+    Constant(final byte @NotNull [] value) {
         this.value = value;
     }
 

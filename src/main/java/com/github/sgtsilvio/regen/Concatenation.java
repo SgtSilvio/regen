@@ -1,16 +1,16 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Silvio Giebl
  */
-public class Concatenation implements RegexPart {
+class Concatenation implements RegexPart {
 
     final @NotNull RegexPart @NotNull [] parts;
     private final int quantity;
 
-    public Concatenation(final @NotNull RegexPart @NotNull [] parts) {
+    Concatenation(final @NotNull RegexPart @NotNull [] parts) {
         this.parts = parts;
         this.quantity = calculateQuantity(parts);
     }

@@ -1,4 +1,4 @@
-package com.github.sgtsilvio.regen.internal;
+package com.github.sgtsilvio.regen;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -8,9 +8,9 @@ import java.util.LinkedList;
 /**
  * @author Silvio Giebl
  */
-public class ConcatenationParser {
+class ConcatenationParser {
 
-    public static @NotNull RegexPart parse(final @NotNull ByteBuffer byteBuffer) {
+    static @NotNull RegexPart parse(final @NotNull ByteBuffer byteBuffer) {
         final RegexPart part = parseWithoutAlternation(byteBuffer);
         if (AlternationParser.continueAlternation(byteBuffer)) {
             return AlternationParser.parse(part, byteBuffer);

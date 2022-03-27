@@ -5,7 +5,5 @@ junit-jupiter = "5.8.2"
 [libraries]
 annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
 
-[bundles]
-
 [plugins]
 metadata = { id = "com.github.sgtsilvio.gradle.metadata", version = "0.3.0" }

@@ -20,7 +20,7 @@ public class ReGen {
         return new ReGen(part);
     }
 
-    private final @NotNull RegexPart root;
+    final @NotNull RegexPart root;
 
     private ReGen(final @NotNull RegexPart root) {
         this.root = root;

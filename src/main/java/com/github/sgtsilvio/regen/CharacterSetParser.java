@@ -88,11 +88,11 @@ class CharacterSetParser {
         } else if ((b & 0b111_00000) == 0b110_00000) { // 2 bytes
             return ((b & 0b000_11111) << 6) + parseUtf8ContinuationByte(byteBuffer);
         } else if ((b & 0b1111_0000) == 0b1110_0000) { // 3 bytes
-            return ((b & 0b000_11111) << 12) +
+            return ((b & 0b0000_1111) << 12) +
                     (parseUtf8ContinuationByte(byteBuffer) << 6) +
                     parseUtf8ContinuationByte(byteBuffer);
         } else if ((b & 0b11111_000) == 0b11110_000) { // 4 bytes
-            return ((b & 0b000_11111) << 18) +
+            return ((b & 0b00000_111) << 18) +
                     (parseUtf8ContinuationByte(byteBuffer) << 12) +
                     (parseUtf8ContinuationByte(byteBuffer) << 6) +
                     parseUtf8ContinuationByte(byteBuffer);

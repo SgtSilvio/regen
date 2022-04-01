@@ -212,6 +212,51 @@ class ReGenParseCharacterSetTest {
     }
 
     @Test
+    void parse_characterSetWith2ByteCharacter() {
+        final ReGen reGen = ReGen.parse("[ä]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals('ä', root.fromCodePoint);
+        assertEquals('ä', root.toCodePoint);
+    }
+
+    @Test
+    void parse_characterSetWith3ByteCharacter() {
+        final ReGen reGen = ReGen.parse("[€]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals('€', root.fromCodePoint);
+        assertEquals('€', root.toCodePoint);
+    }
+
+    @Test
+    void parse_characterSetWith4ByteCharacter() {
+        final ReGen reGen = ReGen.parse("[\uD808\uDC00]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals("\uD808\uDC00".codePointAt(0), root.fromCodePoint);
+        assertEquals("\uD808\uDC00".codePointAt(0), root.toCodePoint);
+    }
+
+    @Test
+    void parse_characterSetWithMultiByteCharacterInRangeAsTo() {
+        final ReGen reGen = ReGen.parse("[a-€]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals('a', root.fromCodePoint);
+        assertEquals('€', root.toCodePoint);
+    }
+
+    @Test
+    void parse_characterSetWithMultiByteCharacterInRangeAsFromAndTo() {
+        final ReGen reGen = ReGen.parse("[ä-€]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals('ä', root.fromCodePoint);
+        assertEquals('€', root.toCodePoint);
+    }
+
+    @Test
     void parse_mergeConsecutiveCharacterRanges() {
         final ReGen reGen = ReGen.parse("[a-b0-1c2d-z3-9]");
         assertTrue(reGen.root instanceof Alternation);

@@ -30,7 +30,10 @@ class CharacterSetParser {
                 break;
         }
         outer:
-        while (byteBuffer.hasRemaining()) {
+        while (true) {
+            if (!byteBuffer.hasRemaining()) {
+                throw new IllegalArgumentException("character class: expected ']'"); // TODO message
+            }
             final int codePoint = parseCodePoint(byteBuffer);
             switch (codePoint) {
                 case ']':

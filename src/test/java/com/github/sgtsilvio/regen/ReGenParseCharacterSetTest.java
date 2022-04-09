@@ -2,8 +2,7 @@ package com.github.sgtsilvio.regen;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Silvio Giebl
@@ -257,6 +256,15 @@ class ReGenParseCharacterSetTest {
     }
 
     @Test
+    void parse_mergeCharacterRangesToOne() {
+        final ReGen reGen = ReGen.parse("[a-bcd-z]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals('a', root.fromCodePoint);
+        assertEquals('z', root.toCodePoint);
+    }
+
+    @Test
     void parse_mergeConsecutiveCharacterRanges() {
         final ReGen reGen = ReGen.parse("[a-b0-1c2d-z3-9]");
         assertTrue(reGen.root instanceof Alternation);
@@ -286,5 +294,40 @@ class ReGenParseCharacterSetTest {
         final CharacterRange alternative1 = (CharacterRange) root.alternatives[1];
         assertEquals('a', alternative1.fromCodePoint);
         assertEquals('z', alternative1.toCodePoint);
+    }
+
+    @Test
+    void parse_characterSetWithoutClosingBracket_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[")); // TODO check message
+    }
+
+    @Test
+    void parse_characterSetWithoutClosingBracketAfterCharacter_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[a")); // TODO check message
+    }
+
+    @Test
+    void parse_characterSetWithoutClosingBracketAfterDash_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[a-")); // TODO check message
+    }
+
+    @Test
+    void parse_characterSetWithoutClosingBracketAfterCharacterRange_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[a-b")); // TODO check message
+    }
+
+    @Test
+    void parse_characterSetWithMissingEscapedCharacter_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[\\")); // TODO check message
+    }
+
+    @Test
+    void parse_characterSetWithUnexpectedEscapedCharacter_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[\\a]")); // TODO check message
+    }
+
+    @Test
+    void parse_negatedCharacterSet_throws() {
+        assertThrows(IllegalArgumentException.class, () -> ReGen.parse("[^a]")); // TODO check message
     }
 }

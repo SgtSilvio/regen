@@ -10,6 +10,35 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReGenParseCharacterSetTest {
 
     @Test
+    void parse_characterSetWithRange() {
+        final ReGen reGen = ReGen.parse("[a-z]");
+        assertTrue(reGen.root instanceof CharacterRange);
+        final CharacterRange root = (CharacterRange) reGen.root;
+        assertEquals('a', root.fromCodePoint);
+        assertEquals('z', root.toCodePoint);
+    }
+
+    @Test
+    void parse_characterSetWithEscapedDashInRange() {
+        final ReGen reGen = ReGen.parse("[a\\-z]");
+        assertTrue(reGen.root instanceof Alternation);
+        final Alternation root = (Alternation) reGen.root;
+        assertEquals(3, root.alternatives.length);
+        assertTrue(root.alternatives[0] instanceof CharacterRange);
+        final CharacterRange alternative0 = (CharacterRange) root.alternatives[0];
+        assertEquals('-', alternative0.fromCodePoint);
+        assertEquals('-', alternative0.toCodePoint);
+        assertTrue(root.alternatives[1] instanceof CharacterRange);
+        final CharacterRange alternative1 = (CharacterRange) root.alternatives[1];
+        assertEquals('a', alternative1.fromCodePoint);
+        assertEquals('a', alternative1.toCodePoint);
+        assertTrue(root.alternatives[2] instanceof CharacterRange);
+        final CharacterRange alternative2 = (CharacterRange) root.alternatives[2];
+        assertEquals('z', alternative2.fromCodePoint);
+        assertEquals('z', alternative2.toCodePoint);
+    }
+
+    @Test
     void parse_characterSetWithUnescapedBracketAfterOpeningBracket() {
         final ReGen reGen = ReGen.parse("[]]");
         assertTrue(reGen.root instanceof CharacterRange);

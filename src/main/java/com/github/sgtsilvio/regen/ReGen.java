@@ -13,10 +13,12 @@ public class ReGen {
     public static @NotNull ReGen parse(final @NotNull String regex) {
         final byte[] regexBytes = regex.getBytes(StandardCharsets.UTF_8);
         final ByteBuffer byteBuffer = ByteBuffer.wrap(regexBytes);
-        final RegexPart part = ConcatenationParser.parse(byteBuffer);
+        final ParseContext context = new ParseContext();
+        final RegexPart part = ConcatenationParser.parse(byteBuffer, context);
         if (byteBuffer.hasRemaining()) {
             throw new IllegalArgumentException("unexpected character '" + byteBuffer.get() + "'"); // TODO message
         }
+        context.validate();
         return new ReGen(part);
     }
 
@@ -32,4 +34,7 @@ public class ReGen {
 //        root.generate(index, bytes, 0);
 //        return bytes;
 //    }
+
+    // generate size, save group size information
+    // generate bytes, save group position information, if necessary save reference position information
 }

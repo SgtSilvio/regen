@@ -7,17 +7,13 @@ import org.jetbrains.annotations.NotNull;
  */
 class Reference implements RegexPart {
 
+    private final int index;
     private final @NotNull String name;
 
-    Reference(final @NotNull String name) {
+    Reference(final int index, final @NotNull String name) {
+        this.index = index;
         this.name = name;
     }
-
-//    private final @NotNull Group group;
-//
-//    Reference(final @NotNull Group group) {
-//        this.group = group;
-//    }
 
     @Override
     public int getQuantity() {

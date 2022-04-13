@@ -10,7 +10,7 @@ import java.nio.charset.StandardCharsets;
  */
 class ReferenceParser {
 
-    static @NotNull Reference parse(final @NotNull ByteBuffer byteBuffer) {
+    static @NotNull Reference parse(final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
         if (!byteBuffer.hasRemaining() || byteBuffer.get() != '\\') {
             throw new IllegalArgumentException("reference must start with '\\'"); // TODO message
         }
@@ -31,6 +31,6 @@ class ReferenceParser {
         byteBuffer.get(nameBytes);
         byteBuffer.position(byteBuffer.position() + 1);
         final String name = new String(nameBytes, StandardCharsets.UTF_8);
-        return new Reference(name);
+        return context.addReference(name);
     }
 }

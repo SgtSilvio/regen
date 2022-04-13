@@ -11,12 +11,13 @@ import java.util.LinkedList;
  */
 class AlternationParser {
 
-    static @NotNull Alternation parse(final @NotNull RegexPart part, final @NotNull ByteBuffer byteBuffer) {
+    static @NotNull Alternation parse(
+            final @NotNull RegexPart part, final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
         final LinkedList<RegexPart> alternatives = new LinkedList<>();
         alternatives.add(part);
         while (continueAlternation(byteBuffer)) {
             byteBuffer.position(byteBuffer.position() + 1);
-            final RegexPart alternative = ConcatenationParser.parseWithoutAlternation(byteBuffer);
+            final RegexPart alternative = ConcatenationParser.parseWithoutAlternation(byteBuffer, context);
             if (alternative instanceof Alternation) { // flatten alternation
                 Collections.addAll(alternatives, ((Alternation) alternative).alternatives);
             } else {

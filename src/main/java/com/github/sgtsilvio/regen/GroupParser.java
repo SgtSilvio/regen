@@ -11,16 +11,16 @@ import java.nio.charset.StandardCharsets;
  */
 class GroupParser {
 
-    static @NotNull RegexPart parse(final @NotNull ByteBuffer byteBuffer) {
+    static @NotNull RegexPart parse(final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
         if (!byteBuffer.hasRemaining() || (byteBuffer.get() != '(')) {
             throw new IllegalArgumentException("group must start with '('"); // TODO message
         }
         final String name = parseName(byteBuffer);
-        final RegexPart part = ConcatenationParser.parse(byteBuffer);
+        final RegexPart part = ConcatenationParser.parse(byteBuffer, context);
         if (!byteBuffer.hasRemaining() || (byteBuffer.get() != ')')) {
             throw new IllegalArgumentException("group must end with ')'"); // TODO message
         }
-        return (name == null) ? part : new Group(part, name);
+        return (name == null) ? part : context.addGroup(name, part);
     }
 
     private static @Nullable String parseName(final @NotNull ByteBuffer byteBuffer) {

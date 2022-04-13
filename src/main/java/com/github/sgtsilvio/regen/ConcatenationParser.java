@@ -10,18 +10,19 @@ import java.util.LinkedList;
  */
 class ConcatenationParser {
 
-    static @NotNull RegexPart parse(final @NotNull ByteBuffer byteBuffer) {
-        final RegexPart part = parseWithoutAlternation(byteBuffer);
+    static @NotNull RegexPart parse(final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
+        final RegexPart part = parseWithoutAlternation(byteBuffer, context);
         if (AlternationParser.continueAlternation(byteBuffer)) {
-            return AlternationParser.parse(part, byteBuffer);
+            return AlternationParser.parse(part, byteBuffer, context);
         }
         return part;
     }
 
-    static @NotNull RegexPart parseWithoutAlternation(final @NotNull ByteBuffer byteBuffer) {
+    static @NotNull RegexPart parseWithoutAlternation(
+            final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
         final LinkedList<RegexPart> parts = new LinkedList<>();
         while (continueConcatenation(byteBuffer)) {
-            final RegexPart part = parseNext(byteBuffer);
+            final RegexPart part = parseNext(byteBuffer, context);
             if (part instanceof Concatenation) { // flatten concatenation
                 for (final RegexPart nestedPart : ((Concatenation) part).parts) {
                     add(parts, nestedPart);
@@ -51,21 +52,23 @@ class ConcatenationParser {
         return true;
     }
 
-    private static @NotNull RegexPart parseNext(final @NotNull ByteBuffer byteBuffer) {
-        return parseSuffixIfPresent(parseStandalone(byteBuffer), byteBuffer);
+    private static @NotNull RegexPart parseNext(
+            final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
+        return parseSuffixIfPresent(parseStandalone(byteBuffer, context), byteBuffer);
     }
 
-    private static @NotNull RegexPart parseStandalone(final @NotNull ByteBuffer byteBuffer) {
+    private static @NotNull RegexPart parseStandalone(
+            final @NotNull ByteBuffer byteBuffer, final @NotNull ParseContext context) {
         switch (byteBuffer.get(byteBuffer.position())) {
             case '(':
-                return GroupParser.parse(byteBuffer);
+                return GroupParser.parse(byteBuffer, context);
             case '[':
                 return CharacterSetParser.parse(byteBuffer);
             case '<':
                 return NumberRangeParser.parse(byteBuffer);
             case '\\':
                 if (byteBuffer.get(byteBuffer.position() + 1) == 'k') {
-                    return ReferenceParser.parse(byteBuffer);
+                    return ReferenceParser.parse(byteBuffer, context);
                 }
                 break;
             case '?':

@@ -7,10 +7,12 @@ import org.jetbrains.annotations.NotNull;
  */
 class Group implements RegexPart {
 
-    private final @NotNull RegexPart part;
+    private final int index;
     private final @NotNull String name;
+    private final @NotNull RegexPart part;
 
-    Group(final @NotNull RegexPart part, final @NotNull String name) {
+    Group(final int index, final @NotNull String name, final @NotNull RegexPart part) {
+        this.index = index;
         this.part = part;
         this.name = name;
     }

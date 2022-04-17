@@ -19,4 +19,20 @@ class Reference implements RegexPart {
     public int getQuantity() {
         return 1;
     }
+
+    @Override
+    public int generatedSize(final int index) {
+        if (index != 0) {
+            throw new IllegalArgumentException("index too big"); // TODO message
+        }
+        return 0; // TODO
+    }
+
+    @Override
+    public int generate(final int index, final byte @NotNull [] bytes, final int end) {
+        if (index != 0) {
+            throw new IllegalArgumentException("index too big"); // TODO message
+        }
+        return end; // TODO
+    }
 }

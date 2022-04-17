@@ -30,4 +30,33 @@ class Concatenation implements RegexPart {
     public int getQuantity() {
         return quantity;
     }
+
+    @Override
+    public int generatedSize(int index) {
+        int generatedSize = 0;
+        for (int i = parts.length - 1; i >= 0; i--) {
+            final RegexPart part = parts[i];
+            final int partQuantity = part.getQuantity();
+            generatedSize += part.generatedSize(index % partQuantity);
+            index /= partQuantity;
+        }
+        if (index != 0) {
+            throw new IllegalArgumentException("index too big"); // TODO message
+        }
+        return generatedSize;
+    }
+
+    @Override
+    public int generate(int index, final byte @NotNull [] bytes, int end) {
+        for (int i = parts.length - 1; i >= 0; i--) {
+            final RegexPart part = parts[i];
+            final int partQuantity = part.getQuantity();
+            end = part.generate(index % partQuantity, bytes, end);
+            index /= partQuantity;
+        }
+        if (index != 0) {
+            throw new IllegalArgumentException("index too big"); // TODO message
+        }
+        return end;
+    }
 }

@@ -19,21 +19,23 @@ public class ReGen {
             throw new IllegalArgumentException("unexpected character '" + byteBuffer.get() + "'"); // TODO message
         }
         context.validate();
-        return new ReGen(part);
+        return new ReGen(part, context.getGroupCount());
     }
 
     final @NotNull RegexPart root;
+    private int groupCount;
 
-    private ReGen(final @NotNull RegexPart root) {
+    private ReGen(final @NotNull RegexPart root, final int groupCount) {
         this.root = root;
+        this.groupCount = groupCount;
     }
 
-//    public byte @NotNull [] generate(final int index) {
-//        final int size = root.generatedSize(index);
-//        final byte[] bytes = new byte[size];
-//        root.generate(index, bytes, 0);
-//        return bytes;
-//    }
+    public byte @NotNull [] generate(final int index) {
+        final int size = root.generatedSize(index);
+        final byte[] bytes = new byte[size];
+        root.generate(index, bytes, bytes.length - 1);
+        return bytes;
+    }
 
     // generate size, save group size information
     // generate bytes, save group position information, if necessary save reference position information

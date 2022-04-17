@@ -49,7 +49,7 @@ class Repetition implements RegexPart {
     private final int minRepetitions;
     private final int maxRepetitions;
     private final int maxQuantity;
-    private final boolean randomize;
+    private final boolean randomize; // TODO use
     private final int quantity;
 
     // validation if maxSize != Integer.MAX_VALUE && maxSize > getSize() warn
@@ -94,5 +94,56 @@ class Repetition implements RegexPart {
     @Override
     public int getQuantity() {
         return quantity;
+    }
+
+    @Override
+    public int generatedSize(int index) {
+        final long repetitionsAndIndex = calculateRepetitions(index);
+        final int repetitions = (int) repetitionsAndIndex;
+        index = (int) (repetitionsAndIndex >>> 32);
+        final int partQuantity = part.getQuantity();
+        int generatedSize = 0;
+        for (int i = 0; i < repetitions; i++) {
+            generatedSize += part.generatedSize(index % partQuantity);
+            index /= partQuantity;
+        }
+        if (index != 0) {
+            throw new IllegalArgumentException("index too big"); // TODO message
+        }
+        return generatedSize;
+    }
+
+    @Override
+    public int generate(int index, final byte @NotNull [] bytes, int end) {
+        final long repetitionsAndIndex = calculateRepetitions(index);
+        final int repetitions = (int) repetitionsAndIndex;
+        index = (int) (repetitionsAndIndex >>> 32);
+        final int partQuantity = part.getQuantity();
+        for (int i = 0; i < repetitions; i++) {
+            end = part.generate(index % partQuantity, bytes, end);
+            index /= partQuantity;
+        }
+        if (index != 0) {
+            throw new IllegalArgumentException("index too big"); // TODO message
+        }
+        return end;
+    }
+
+    private long calculateRepetitions(int index) {
+        final int partQuantity = part.getQuantity();
+        int repetitionQuantity = (int) Math.pow(partQuantity, minRepetitions);
+        if (index < repetitionQuantity) {
+            return minRepetitions | ((long) index << 32);
+        }
+        index -= repetitionQuantity;
+        for (int i = minRepetitions + 1; i <= maxRepetitions; i++) {
+            final long nextRepetitionQuantity = (long) repetitionQuantity * partQuantity;
+            if (index < nextRepetitionQuantity) {
+                return i | ((long) index << 32);
+            }
+            repetitionQuantity = (int) nextRepetitionQuantity;
+            index -= repetitionQuantity;
+        }
+        throw new IllegalArgumentException("index too big"); // TODO message
     }
 }

@@ -3,7 +3,8 @@ package com.github.sgtsilvio.regen;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * @author Silvio Giebl
@@ -58,5 +59,9 @@ class ParseContext {
                 throw new IllegalArgumentException("group '" + name + "' is missing but is referenced"); // TODO message
             }
         });
+    }
+
+    int getGroupCount() {
+        return (groupEntries == null) ? 0 : groupEntries.size();
     }
 }

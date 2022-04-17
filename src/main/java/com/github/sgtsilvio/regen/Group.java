@@ -21,4 +21,14 @@ class Group implements RegexPart {
     public int getQuantity() {
         return part.getQuantity();
     }
+
+    @Override
+    public int generatedSize(final int index) {
+        return part.generatedSize(index);
+    }
+
+    @Override
+    public int generate(final int index, final byte @NotNull [] bytes, final int end) {
+        return part.generate(index, bytes, end);
+    }
 }

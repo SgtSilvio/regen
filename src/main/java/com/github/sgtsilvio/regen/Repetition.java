@@ -50,6 +50,7 @@ class Repetition implements RegexPart {
     private final int maxRepetitions;
     private final int maxQuantity;
     private final boolean randomize; // TODO use
+    private final int minRepetitionQuantity;
     private final int quantity;
 
     // validation if maxSize != Integer.MAX_VALUE && maxSize > getSize() warn
@@ -65,30 +66,34 @@ class Repetition implements RegexPart {
         this.maxRepetitions = maxRepetitions;
         this.maxQuantity = maxQuantity;
         this.randomize = randomize;
-        this.quantity = calculateQuantity(part, minRepetitions, maxRepetitions, maxQuantity);
+        minRepetitionQuantity = (int) Math.pow(part.getQuantity(), minRepetitions);
+        quantity = calculateQuantity(part, minRepetitions, maxRepetitions, maxQuantity, minRepetitionQuantity);
     }
 
     private static int calculateQuantity(
-            final @NotNull RegexPart part, final int minRepetitions, final int maxRepetitions, final int maxQuantity) {
-
+            final @NotNull RegexPart part,
+            final int minRepetitions,
+            final int maxRepetitions,
+            final int maxQuantity,
+            final int minRepetitionQuantity) {
         if (maxRepetitions == Integer.MAX_VALUE) {
             return maxQuantity;
         }
         final int partQuantity = part.getQuantity();
-        int pow = (int) Math.pow(partQuantity, minRepetitions);
-        int sum = pow;
+        int repetitionQuantity = minRepetitionQuantity;
+        int quantity = repetitionQuantity;
         for (int i = minRepetitions; i < maxRepetitions; i++) {
-            final long product = (long) pow * partQuantity;
-            if (product > maxQuantity) {
+            final long nextRepetitionQuantity = (long) repetitionQuantity * partQuantity;
+            if (nextRepetitionQuantity > maxQuantity) {
                 return maxQuantity;
             }
-            pow = (int) product;
-            sum += pow;
-            if (sum < 0) {
+            repetitionQuantity = (int) nextRepetitionQuantity;
+            quantity += repetitionQuantity;
+            if (quantity < 0) {
                 return maxQuantity;
             }
         }
-        return Math.min(sum, maxQuantity);
+        return Math.min(quantity, maxQuantity);
     }
 
     @Override
@@ -131,7 +136,7 @@ class Repetition implements RegexPart {
 
     private long calculateRepetitions(int index) {
         final int partQuantity = part.getQuantity();
-        int repetitionQuantity = (int) Math.pow(partQuantity, minRepetitions);
+        int repetitionQuantity = minRepetitionQuantity;
         if (index < repetitionQuantity) {
             return minRepetitions | ((long) index << 32);
         }
